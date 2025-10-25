@@ -1,2 +1,2 @@
 #!/bin/bash
-john --wordlist=/usr/share/wordlists/rockyou.txt --format=Raw-MD5 $1 | cut -d ' ' -f 1,2,3 > 4-password.txt
+john --wordlist=/usr/share/wordlists/rockyou.txt --format=Raw-MD5 "$1" >/dev/null 2>&1; mapfile -t pwds < <(john --show --format=Raw-MD5 "$1" | awk -F: 'NF>=2{print $2}'); if [ "${#pwds[@]}" -ge 2 ]; then printf '%s\n%s\n' "${pwds[0]}" "${pwds[1]}" > 4-password.txt; elif [ "${#pwds[@]}" -eq 1 ]; then printf '%s\n%s\n' "${pwds[0]}" "${pwds[0]}" > 4-password.txt
