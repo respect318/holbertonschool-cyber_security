@@ -1,2 +1,2 @@
 #!/bin/bash
-openssl s_client -starttls smtp -connect localhost:25
+grep -E '^smtpd_tls_security_level' /etc/postfix/main.cf 2>/dev/null || echo "STARTTLS konfiq edilmiyib"
