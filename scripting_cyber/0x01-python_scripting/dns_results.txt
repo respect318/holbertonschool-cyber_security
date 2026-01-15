@@ -1,8 +1,1 @@
-DNS Resolver Test
-============================================================
-holbertonschool.com                      -> 75.2.70.75
-google.com                               -> 142.250.75.46
-github.com                               -> 140.82.121.4
-example.com                              -> 104.18.26.120
-this-is-not-a-site.com                   -> Failed to resolve
-============================================================
+None
