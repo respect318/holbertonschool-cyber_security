@@ -1,0 +1,19 @@
+HTTP Headers for: https://www.google.com
+==================================================
+Status Code: 200
+Headers:
+
+  Date: Thu, 15 Jan 2026 21:18:31 GMT
+  Expires: -1
+  Cache-Control: private, max-age=0
+  Content-Type: text/html; charset=ISO-8859-1
+  Content-Security-Policy-Report-Only: object-src 'none';base-uri 'self';script-src 'nonce-einsc90EfvtwlJgOF0POuA' 'strict-dynamic' 'report-sample' 'unsafe-eval' 'unsafe-inline' https: http:;report-uri https://csp.withgoogle.com/csp/gws/other-hp
+  Accept-CH: Sec-CH-Prefers-Color-Scheme
+  P3P: CP="This is not a P3P policy! See g.co/p3phelp for more info."
+  Content-Encoding: gzip
+  Server: gws
+  X-XSS-Protection: 0
+  X-Frame-Options: SAMEORIGIN
+  Set-Cookie: __Secure-STRP=AD6DogujrUeC34v7gFZThPq0ZJCQ7FAfkPEXtzxgJubPls1ZDSFHmDg-VPiRUT5b_y0aSKFes5aIDoseA80N3MQSGh92FAdDd7uE; expires=Thu, 15-Jan-2026 21:23:31 GMT; path=/; domain=.google.com; Secure; SameSite=strict, AEC=AaJma5vKcL0fGL_TvdCvZ5ye4F4cMEeIfMp4k3QiAt49M2Bf9bycBds-gQ; expires=Tue, 14-Jul-2026 21:18:31 GMT; path=/; domain=.google.com; Secure; HttpOnly; SameSite=lax, NID=528=E-xo6qXrYfsMdeYqUmby-DiPspqOuMlje-Pyza_ZN1H6p8sCsZLOoZzjcsQ3mdxWX_gL5ZRjqQC_V-aj5LTqgSpE-6cKh2RJu1uSCxfA4vuB8NGaxvbxrMtLWDbXNjf8Cv7ayJ-f0ACHCPPZ-9LBRJmq_2reIkBE6i6R6I6wtK0ZDd8ZWgFba9fXh4gtR0zG8Yj1i4xvYidvp9SR3YDonwRXPJFKVrzM; expires=Fri, 17-Jul-2026 21:18:31 GMT; path=/; domain=.google.com; HttpOnly, __Secure-BUCKET=COEG; expires=Tue, 14-Jul-2026 21:18:31 GMT; path=/; domain=.google.com; Secure; HttpOnly
+  Alt-Svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+  Transfer-Encoding: chunked
