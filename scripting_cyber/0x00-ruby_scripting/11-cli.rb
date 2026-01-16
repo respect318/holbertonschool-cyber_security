@@ -1,10 +1,15 @@
 #!/usr/bin/env ruby
 require 'optparse'
 
-TASK_FILE = 'tasks.txt'
+# Define the file where tasks will be stored
+TASK_FILE = "tasks.txt"
+
+# Ensure the file exists so read operations don't fail
+File.open(TASK_FILE, 'a') {}
 
 options = {}
-OptionParser.new do |opts|
+
+opt_parser = OptionParser.new do |opts|
   opts.banner = "Usage: cli.rb [options]"
 
   opts.on("-a", "--add TASK", "Add a new task") do |task|
@@ -23,30 +28,47 @@ OptionParser.new do |opts|
     puts opts
     exit
   end
-end.parse!
+end
 
-# Ensure tasks file exists
-File.write(TASK_FILE, '') unless File.exist?(TASK_FILE)
+# Parse the command line arguments
+begin
+  opt_parser.parse!
+rescue OptionParser::InvalidOption, OptionParser::MissingArgument => e
+  puts e.message
+  puts opt_parser
+  exit 1
+end
 
-tasks = File.readlines(TASK_FILE, chomp: true)
-
+# Logic for Adding a Task
 if options[:add]
-  tasks << options[:add]
-  File.write(TASK_FILE, tasks.join("\n"))
-  puts "Task '#{options[:add]}' added."
-elsif options[:list]
-  puts "Tasks:"
-  puts             # <<< boş sətir: checker tələb edir
-  tasks.each { |t| puts t }
-elsif options[:remove]
-  index = options[:remove] - 1
-  if index >= 0 && index < tasks.size
-    removed = tasks.delete_at(index)
-    File.write(TASK_FILE, tasks.join("\n"))
-    puts "Task '#{removed}' removed."
-  else
-    puts "Invalid task index."
+  File.open(TASK_FILE, "a") do |f|
+    f.puts options[:add]
   end
-else
-  puts "No option provided. Use -h for help."
+  puts "Task '#{options[:add]}' added."
+end
+
+# Logic for Listing Tasks
+if options[:list]
+  tasks = File.readlines(TASK_FILE)
+  if tasks.empty?
+    puts "No tasks found."
+  else
+    puts tasks.map(&:strip)
+  end
+end
+
+# Logic for Removing a Task
+if options[:remove]
+  tasks = File.readlines(TASK_FILE)
+  index = options[:remove] - 1 # Convert to 0-based index
+
+  if index >= 0 && index < tasks.length
+    removed_task = tasks.delete_at(index).strip
+    File.open(TASK_FILE, "w") do |f|
+      f.puts tasks
+    end
+    puts "Task '#{removed_task}' removed."
+  else
+    puts "Error: Task at index #{options[:remove]} not found."
+  end
 end
