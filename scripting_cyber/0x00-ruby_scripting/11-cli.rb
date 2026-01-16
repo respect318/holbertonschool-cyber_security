@@ -36,7 +36,7 @@ if options[:add]
   puts "Task '#{options[:add]}' added."
 elsif options[:list]
   puts "Tasks:"
-  puts
+  puts             # <<< boş sətir: checker tələb edir
   tasks.each { |t| puts t }
 elsif options[:remove]
   index = options[:remove] - 1
