@@ -35,11 +35,9 @@ if options[:add]
   File.write(TASK_FILE, tasks.join("\n"))
   puts "Task '#{options[:add]}' added."
 elsif options[:list]
-  if tasks.empty?
-    puts "No tasks found."
-  else
-    tasks.each { |t| puts t }
-  end
+  puts "Tasks:"
+  puts
+  tasks.each { |t| puts t }
 elsif options[:remove]
   index = options[:remove] - 1
   if index >= 0 && index < tasks.size
