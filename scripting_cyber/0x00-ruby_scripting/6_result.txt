@@ -1,6 +1,7 @@
 Response status: 200 OK
 
 Response body:
+
 {
   "userId": 1,
   "id": 1,
