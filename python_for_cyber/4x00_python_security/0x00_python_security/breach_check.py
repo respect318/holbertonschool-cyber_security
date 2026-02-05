@@ -1,45 +1,48 @@
-#!/usr/bin/env python3
-import logging
-
 # -----------------------------
-# Task 6: The Logger
+# Task 7: The Policy Engine
 # -----------------------------
-def setup_logger(name: str, logfile: str = None, level=logging.INFO):
+def check_policy(password: str) -> str:
     """
-    Create a logger with optional file output.
-    Logs to console by default.
+    Check password strength based on policy.
+    Returns 'WEAK' or 'COMPLIANT'.
+    
+    Policy:
+    - WEAK if length < 8
+    - WEAK if contains only letters
+    - WEAK if in common passwords list
+    - Otherwise, COMPLIANT
     """
-    logger = logging.getLogger(name)
-    logger.setLevel(level)
+    # Define a small common passwords list
+    common_passwords = {"password", "123456", "qwerty", "123456789", "abc123"}
 
-    # Prevent adding multiple handlers if function called multiple times
-    if not logger.hasHandlers():
-        # Console handler
-        ch = logging.StreamHandler()
-        ch.setFormatter(logging.Formatter("%(asctime)s - %(levelname)s - %(message)s"))
-        logger.addHandler(ch)
+    # Check length
+    if len(password) < 8:
+        return "WEAK"
 
-        # Optional file handler
-        if logfile:
-            fh = logging.FileHandler(logfile)
-            fh.setFormatter(logging.Formatter("%(asctime)s - %(levelname)s - %(message)s"))
-            logger.addHandler(fh)
+    # Check if password contains only letters
+    if password.isalpha():
+        return "WEAK"
 
-    return logger
+    # Check if password is in common passwords list
+    if password in common_passwords:
+        return "WEAK"
+
+    # If all checks passed, password is compliant
+    return "COMPLIANT"
 
 # -----------------------------
-# Example usage for testing
+# Example test usage
 # -----------------------------
 if __name__ == "__main__":
-    # Your main logger
-    log = setup_logger("BreachLogger", "breach.log")
-    log.info("This is an info message.")
-    log.warning("This is a warning message.")
-    log.error("This is an error message.")
+    # Sample passwords to test the policy engine
+    test_passwords = [
+        "12345",          # WEAK: too short
+        "password",       # WEAK: common password
+        "abcdefgh",       # WEAK: only letters
+        "abc12345",       # COMPLIANT
+        "P@ssw0rd2026"    # COMPLIANT
+    ]
 
-    # Minimal logging calls for checker
-    logging.basicConfig(level=logging.INFO)
-    logging.info("Checker sees this info message")
-    logging.debug("Checker sees this debug message")
-    logging.warning("Checker sees this warning message")
-    logging.error("Checker sees this error message")
+    # Print results for each test password
+    for pwd in test_passwords:
+        print(f"{pwd}: {check_policy(pwd)}")
