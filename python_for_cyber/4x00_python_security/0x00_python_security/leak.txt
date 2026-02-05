@@ -1,4 +1,5 @@
 dfcgvhjsbkankmla
+password = line.split(":", 1)[1]
 acgvhbjsnkmlasdcs
 aegfvadcsx
 servwds

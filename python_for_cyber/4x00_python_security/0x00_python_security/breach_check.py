@@ -1,42 +1,52 @@
 #!/usr/bin/env python3
-import hashlib
+import argparse
+import sys
+from utils import clean_data, validate_line, hash_password
 
 # -----------------------------
-# Task 8: The Secure Hash
+# Task 3: Safe Reader
 # -----------------------------
-def hash_password(password: str, salt: str) -> str:
+def read_file(filename: str) -> list:
     """
-    Hash a password securely using SHA-256 with a salt.
-
-    Steps:
-    1. Encode the password to bytes
-    2. Append the salt (also encoded)
-    3. Hash using SHA-256
-    4. Return the hexadecimal digest string
+    Safely read a file line by line.
     """
-    # Encode password and salt to bytes
-    password_bytes = password.encode('utf-8')
-    salt_bytes = salt.encode('utf-8')
-
-    # Append salt
-    combined = password_bytes + salt_bytes
-
-    # Create SHA-256 hash
-    hashed = hashlib.sha256(combined)
-
-    # Return hexadecimal string
-    return hashed.hexdigest()
+    try:
+        with open(filename, "r") as f:
+            return f.readlines()
+    except FileNotFoundError:
+        print(f"[ERROR] File not found: {filename}", file=sys.stderr)
+        sys.exit(1)
+    except PermissionError:
+        print(f"[ERROR] Permission denied: {filename}", file=sys.stderr)
+        sys.exit(1)
 
 # -----------------------------
-# Example test usage
+# Task 10: Main function
 # -----------------------------
+def main():
+    parser = argparse.ArgumentParser(
+        description="BreachCheck v1.0 - Refactored Package Example"
+    )
+    parser.add_argument("-f", "--file", required=True, help="Input file path")
+    args = parser.parse_args()
+
+    # Read file
+    lines = read_file(args.file)
+    cleaned = clean_data(lines)
+
+    # Show cleaned lines
+    print("Cleaned lines:", cleaned)
+
+    # Validate each line and hash only valid passwords
+    for line in cleaned:
+        if validate_line(line):
+            email, password = line.split(":", 1)
+            print(f"{line} is valid")
+            print("SHA-256 hash:", hash_password(password, "mysalt"))
+        else:
+            print(f"{line} skipped: invalid format")
+
+# Entry point
 if __name__ == "__main__":
-    test_passwords = [
-        ("password123", "mysalt"),
-        ("abc12345", "salt2026"),
-        ("P@ssw0rd2026", "secure!")
-    ]
+    main()
 
-    # Hash each password and print the result
-    for pwd, salt in test_passwords:
-        print(f"Password: {pwd} | Salt: {salt} | SHA-256: {hash_password(pwd, salt)}")
