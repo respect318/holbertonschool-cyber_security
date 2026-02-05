@@ -1,0 +1,20 @@
+HTTP Headers for: https://www.google.com
+==================================================
+Status Code: 200
+Headers:
+
+  Date: Thu, 05 Feb 2026 10:32:10 GMT
+  Expires: -1
+  Cache-Control: private, max-age=0
+  Content-Type: text/html; charset=ISO-8859-1
+  Content-Security-Policy-Report-Only: object-src 'none';base-uri 'self';script-src 'nonce-134Gv86Iu6WeCUnJKUWw-Q' 'strict-dynamic' 'report-sample' 'unsafe-eval' 'unsafe-inline' https: http:;report-uri https://csp.withgoogle.com/csp/gws/other-hp
+  Reporting-Endpoints: default="//www.google.com/httpservice/retry/jserror?ei=qnGEabejOPCrxc8Pko_smQk&cad=crash"
+  Accept-CH: Sec-CH-Prefers-Color-Scheme
+  P3P: CP="This is not a P3P policy! See g.co/p3phelp for more info."
+  Content-Encoding: gzip
+  Server: gws
+  X-XSS-Protection: 0
+  X-Frame-Options: SAMEORIGIN
+  Set-Cookie: __Secure-STRP=AD6DoguTjOpHKhUbEgG6wEN7MwLLOjfAsqMTjGFrrIVfd_1ciQJwybLieQrP2cj4usdGQWfb45d52oGuWIqYmUa9QMiBCZ9S8TPy; expires=Thu, 05-Feb-2026 10:37:10 GMT; path=/; domain=.google.com; Secure; SameSite=strict, AEC=AaJma5tXYv5gWuzN3zt-EesCG_mVyYFO4wEdaKXkwJTL1zyGgRmN1QyaypM; expires=Tue, 04-Aug-2026 10:32:10 GMT; path=/; domain=.google.com; Secure; HttpOnly; SameSite=lax, NID=528=KICDpP5SU9qOdtrSFCzI5dbpCuyKyy-C7x44Y6aPYRPsFgBBXZmYifBJDnNjxowMx25hzv93yj5Sq2ieSU7QJxx9ny3DsgrWrMIJAKeLbuRDWW1eLnR7Bbh2U8oMkXEm4DG3z-1f007e1Asq0gkThZ3JHxbjcDkC5R6n1MRhSPVEIhDv3n21v41c6G9J8t9aAQ_GHwI4t5qTAgUbXFXSsU7WZxImCKLc; expires=Fri, 07-Aug-2026 10:32:10 GMT; path=/; domain=.google.com; HttpOnly, __Secure-BUCKET=CLUE; expires=Tue, 04-Aug-2026 10:32:10 GMT; path=/; domain=.google.com; Secure; HttpOnly
+  Alt-Svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+  Transfer-Encoding: chunked
