@@ -1,48 +1,42 @@
+#!/usr/bin/env python3
+import hashlib
+
 # -----------------------------
-# Task 7: The Policy Engine
+# Task 8: The Secure Hash
 # -----------------------------
-def check_policy(password: str) -> str:
+def hash_password(password: str, salt: str) -> str:
     """
-    Check password strength based on policy.
-    Returns 'WEAK' or 'COMPLIANT'.
-    
-    Policy:
-    - WEAK if length < 8
-    - WEAK if contains only letters
-    - WEAK if in common passwords list
-    - Otherwise, COMPLIANT
+    Hash a password securely using SHA-256 with a salt.
+
+    Steps:
+    1. Encode the password to bytes
+    2. Append the salt (also encoded)
+    3. Hash using SHA-256
+    4. Return the hexadecimal digest string
     """
-    # Define a small common passwords list
-    common_passwords = {"password", "123456", "qwerty", "123456789", "abc123"}
+    # Encode password and salt to bytes
+    password_bytes = password.encode('utf-8')
+    salt_bytes = salt.encode('utf-8')
 
-    # Check length
-    if len(password) < 8:
-        return "WEAK"
+    # Append salt
+    combined = password_bytes + salt_bytes
 
-    # Check if password contains only letters
-    if password.isalpha():
-        return "WEAK"
+    # Create SHA-256 hash
+    hashed = hashlib.sha256(combined)
 
-    # Check if password is in common passwords list
-    if password in common_passwords:
-        return "WEAK"
-
-    # If all checks passed, password is compliant
-    return "COMPLIANT"
+    # Return hexadecimal string
+    return hashed.hexdigest()
 
 # -----------------------------
 # Example test usage
 # -----------------------------
 if __name__ == "__main__":
-    # Sample passwords to test the policy engine
     test_passwords = [
-        "12345",          # WEAK: too short
-        "password",       # WEAK: common password
-        "abcdefgh",       # WEAK: only letters
-        "abc12345",       # COMPLIANT
-        "P@ssw0rd2026"    # COMPLIANT
+        ("password123", "mysalt"),
+        ("abc12345", "salt2026"),
+        ("P@ssw0rd2026", "secure!")
     ]
 
-    # Print results for each test password
-    for pwd in test_passwords:
-        print(f"{pwd}: {check_policy(pwd)}")
+    # Hash each password and print the result
+    for pwd, salt in test_passwords:
+        print(f"Password: {pwd} | Salt: {salt} | SHA-256: {hash_password(pwd, salt)}")
