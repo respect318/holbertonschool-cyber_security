@@ -21,6 +21,16 @@ def read_file(filename: str) -> list:
         print(f"[ERROR] Permission denied: {filename}", file=sys.stderr)
         sys.exit(1)
 
+# Task 4: Data Cleaner
+def clean_data(lines: list) -> list:
+    clean_lines = []
+    for line in lines:
+        line = line.strip()  # boşluqları sil
+        if line == "" or line.startswith("#"):  # boş və ya şərh sətirlərini at
+            continue
+        clean_lines.append(line)
+    return clean_lines
+
 # -----------------------------
 # Task 1+2: CLI + main()
 # -----------------------------
