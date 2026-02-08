@@ -26,3 +26,17 @@ def parse_apache_line(line: str) -> dict:
         return None
 
     return match.groupdict()
+
+def parse_syslog_line(line: str) -> dict:
+    pattern = (
+        r'(?P<date>[A-Z][a-z]{2}\s+\d+\s+\d{2}:\d{2}:\d{2})\s+'
+        r'(?P<host>\S+)\s+'
+        r'(?P<process>[^:]+):\s+'
+        r'(?P<message>.+)'
+    )
+
+    match = re.search(pattern, line)
+    if not match:
+        return None
+
+    return match.groupdict()
