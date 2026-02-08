@@ -72,7 +72,6 @@ def filter_logs(entries, service=None, status=None):
         filtered.append(entry)
     return filtered
 
-# Task 5: GeoIP enrichment
 GEOIP_DB = {
     '1.2.3.4': 'US',
     '5.6.7.8': 'RU'
