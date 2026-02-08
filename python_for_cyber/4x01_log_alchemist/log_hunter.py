@@ -41,3 +41,37 @@ def parse_syslog_line(line: str) -> dict:
         return None
 
     return match.groupdict()
+
+
+class LogEntry:
+    def __init__(self, ip, timestamp, service, message, raw_line):
+        self.ip = ip
+        self.timestamp = timestamp
+        self.service = service
+        self.message = message
+        self.raw_line = raw_line
+
+
+def normalize_entry(parsed_dict, type):
+    if not parsed_dict:
+        return None
+
+    if type == "apache":
+        return LogEntry(
+            ip=parsed_dict.get("ip"),
+            timestamp=parsed_dict.get("date"),
+            service="http",
+            message=parsed_dict.get("path"),
+            raw_line=None
+        )
+
+    if type == "syslog":
+        return LogEntry(
+            ip=None,
+            timestamp=parsed_dict.get("date"),
+            service="ssh",
+            message=parsed_dict.get("message"),
+            raw_line=None
+        )
+
+    return None
