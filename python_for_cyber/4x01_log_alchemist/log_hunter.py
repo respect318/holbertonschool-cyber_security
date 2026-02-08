@@ -2,7 +2,6 @@
 
 import re
 
-
 def read_stream(file_path: str):
     try:
         with open(file_path, 'r') as file:
@@ -10,7 +9,6 @@ def read_stream(file_path: str):
                 yield line
     except FileNotFoundError:
         return
-
 
 def parse_apache_line(line: str) -> dict:
     pattern = (
@@ -25,7 +23,6 @@ def parse_apache_line(line: str) -> dict:
         return None
     return match.groupdict()
 
-
 def parse_syslog_line(line: str) -> dict:
     pattern = (
         r'(?P<date>[A-Z][a-z]{2}\s+\d+\s+\d{2}:\d{2}:\d{2})\s+'
@@ -38,7 +35,6 @@ def parse_syslog_line(line: str) -> dict:
         return None
     return match.groupdict()
 
-
 class LogEntry:
     def __init__(self, ip, timestamp, service, message, raw_line):
         self.ip = ip
@@ -47,11 +43,9 @@ class LogEntry:
         self.message = message
         self.raw_line = raw_line
 
-
 def normalize_entry(parsed_dict, type):
     if not parsed_dict:
         return None
-
     if type == "apache":
         return LogEntry(
             ip=parsed_dict.get("ip"),
@@ -60,7 +54,6 @@ def normalize_entry(parsed_dict, type):
             message=parsed_dict.get("path"),
             raw_line=None
         )
-
     if type == "syslog":
         return LogEntry(
             ip=None,
@@ -69,27 +62,25 @@ def normalize_entry(parsed_dict, type):
             message=parsed_dict.get("message"),
             raw_line=None
         )
-
     return None
 
-
 def filter_logs(entries, service=None, status=None):
-    """
-    Filters a list of LogEntry objects based on service and/or status.
-
-    :param entries: list of LogEntry objects
-    :param service: 'http' or 'ssh' or None
-    :param status: string status for http logs (like '200') or None
-    :return: list of LogEntry objects matching criteria
-    """
     filtered = []
-
     for entry in entries:
         if service and entry.service != service:
             continue
-
-        # Example: if we want to filter by http status
-        # Here status filtering can be expanded if message contains it
         filtered.append(entry)
-
     return filtered
+
+# Task 5: GeoIP enrichment
+GEOIP_DB = {
+    '1.2.3.4': 'US',
+    '5.6.7.8': 'RU'
+}
+
+def enrich_ip(log_entry):
+    if not hasattr(log_entry, 'ip') or log_entry.ip is None:
+        log_entry.country = 'UNKNOWN'
+    else:
+        log_entry.country = GEOIP_DB.get(log_entry.ip, 'UNKNOWN')
+    return log_entry
