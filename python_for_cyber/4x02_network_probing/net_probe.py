@@ -7,34 +7,64 @@ Python network probing toolkit (Level 0)
 import socket
 
 
-def get_banner(ip: str, port: int) -> str:
-    """
-    Grab the banner from a service running on a specific port.
-
-    Args:
-        ip (str): IP address or hostname
-        port (int): TCP port number
-
-    Returns:
-        str: The banner string, or "Unknown" if not received
-    """
+def check_port(ip: str, port: int) -> bool:
+    """Check if a TCP port is open."""
     try:
-        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            s.settimeout(2)
-            s.connect((ip, port))
-            # Send generic probe for HTTP ports
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+            sock.settimeout(1)
+            sock.connect((ip, port))
+            return True
+    except (socket.timeout, ConnectionRefusedError, OSError):
+        return False
+
+
+def get_banner(ip: str, port: int) -> str:
+    """Grab the service banner from an open port."""
+    try:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+            sock.settimeout(2)
+            sock.connect((ip, port))
             if port == 80:
-                s.sendall(b"HEAD / HTTP/1.0\r\n\r\n")
-            banner = s.recv(1024)
+                sock.sendall(b"HEAD / HTTP/1.0\r\n\r\n")
+            banner = sock.recv(1024)
             return banner.decode(errors="ignore").strip()
     except (socket.timeout, ConnectionRefusedError, OSError):
         return "Unknown"
 
 
+def scan_ports(ip: str, start_port: int, end_port: int) -> list:
+    """
+    Scan a range of ports on a target host.
+
+    Args:
+        ip (str): Target IP address
+        start_port (int): Starting port number
+        end_port (int): Ending port number
+
+    Returns:
+        list: List of dictionaries with open ports and services
+    """
+    results = []
+
+    print(f"Scanning {ip} from {start_port} to {end_port}...")
+
+    for port in range(start_port, end_port + 1):
+        if check_port(ip, port):
+            service = get_banner(ip, port)
+            print(f"[+] Port {port} Open: {service}")
+            results.append(
+                {
+                    "port": port,
+                    "service": service
+                }
+            )
+
+    return results
+
+
 def main():
-    """Test get_banner function."""
-    print("NetProbe v1.0 initialized...")
-    print(f"Banner on scanme.nmap.org:22 -> {get_banner('scanme.nmap.org', 22)}")
+    """Main entry point."""
+    scan_ports("192.168.1.1", 20, 80)
 
 
 if __name__ == "__main__":
