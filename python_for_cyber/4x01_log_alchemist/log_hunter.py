@@ -20,11 +20,9 @@ def parse_apache_line(line: str) -> dict:
         r'(?P<status>\d{3})\s+'
         r'(?P<size>\d+)'
     )
-
     match = re.search(pattern, line)
     if not match:
         return None
-
     return match.groupdict()
 
 
@@ -35,11 +33,9 @@ def parse_syslog_line(line: str) -> dict:
         r'(?P<process>[^:]+):\s+'
         r'(?P<message>.+)'
     )
-
     match = re.search(pattern, line)
     if not match:
         return None
-
     return match.groupdict()
 
 
@@ -75,3 +71,25 @@ def normalize_entry(parsed_dict, type):
         )
 
     return None
+
+
+def filter_logs(entries, service=None, status=None):
+    """
+    Filters a list of LogEntry objects based on service and/or status.
+
+    :param entries: list of LogEntry objects
+    :param service: 'http' or 'ssh' or None
+    :param status: string status for http logs (like '200') or None
+    :return: list of LogEntry objects matching criteria
+    """
+    filtered = []
+
+    for entry in entries:
+        if service and entry.service != service:
+            continue
+
+        # Example: if we want to filter by http status
+        # Here status filtering can be expanded if message contains it
+        filtered.append(entry)
+
+    return filtered
