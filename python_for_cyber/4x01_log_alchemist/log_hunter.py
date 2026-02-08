@@ -1,15 +1,18 @@
-BLACKLIST = {'10.0.0.1', '192.168.1.66'}
-
-
-def check_threat_intel(log_entry):
+def analyze_user_agent(log_entry):
     """
-    Checks if log_entry.ip is in the BLACKLIST.
-    If yes, sets log_entry.alert_level = 'HIGH'.
-    Otherwise, sets log_entry.alert_level = 'LOW'.
+    Checks if a LogEntry message contains automated tool User-Agent strings.
+    If it contains sqlmap, nikto, curl, or python, sets log_entry.is_bot = True.
+    Otherwise, sets log_entry.is_bot = False.
     Returns the updated log_entry.
     """
-    if hasattr(log_entry, 'ip') and log_entry.ip in BLACKLIST:
-        log_entry.alert_level = 'HIGH'
-    else:
-        log_entry.alert_level = 'LOW'
+    if not hasattr(log_entry, 'message') or log_entry.message is None:
+        log_entry.is_bot = False
+        return log_entry
+
+    bot_keywords = ['sqlmap', 'nikto', 'curl', 'python']
+
+    message_lower = log_entry.message.lower()
+    log_entry.is_bot = any(keyword in message_lower for keyword in bot_keywords)
+
     return log_entry
+
