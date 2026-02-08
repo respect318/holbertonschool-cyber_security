@@ -27,6 +27,7 @@ def parse_apache_line(line: str) -> dict:
 
     return match.groupdict()
 
+
 def parse_syslog_line(line: str) -> dict:
     pattern = (
         r'(?P<date>[A-Z][a-z]{2}\s+\d+\s+\d{2}:\d{2}:\d{2})\s+'
