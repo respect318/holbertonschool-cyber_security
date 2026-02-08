@@ -2,6 +2,7 @@
 
 import re
 
+
 def read_stream(file_path: str):
     try:
         with open(file_path, 'r') as file:
@@ -9,6 +10,7 @@ def read_stream(file_path: str):
                 yield line
     except FileNotFoundError:
         return
+
 
 def parse_apache_line(line: str) -> dict:
     pattern = (
@@ -23,6 +25,7 @@ def parse_apache_line(line: str) -> dict:
         return None
     return match.groupdict()
 
+
 def parse_syslog_line(line: str) -> dict:
     pattern = (
         r'(?P<date>[A-Z][a-z]{2}\s+\d+\s+\d{2}:\d{2}:\d{2})\s+'
@@ -35,6 +38,7 @@ def parse_syslog_line(line: str) -> dict:
         return None
     return match.groupdict()
 
+
 class LogEntry:
     def __init__(self, ip, timestamp, service, message, raw_line):
         self.ip = ip
@@ -42,6 +46,7 @@ class LogEntry:
         self.service = service
         self.message = message
         self.raw_line = raw_line
+
 
 def normalize_entry(parsed_dict, type):
     if not parsed_dict:
@@ -64,6 +69,7 @@ def normalize_entry(parsed_dict, type):
         )
     return None
 
+
 def filter_logs(entries, service=None, status=None):
     filtered = []
     for entry in entries:
@@ -72,10 +78,12 @@ def filter_logs(entries, service=None, status=None):
         filtered.append(entry)
     return filtered
 
+
 GEOIP_DB = {
     '1.2.3.4': 'US',
     '5.6.7.8': 'RU'
 }
+
 
 def enrich_ip(log_entry):
     if not hasattr(log_entry, 'ip') or log_entry.ip is None:
