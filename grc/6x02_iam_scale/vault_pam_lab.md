@@ -1,11 +1,26 @@
 # MedDefense Privileged Access Management (PAM) Lab Documentation
 
-## Demonstration Sequence Outputs
+## Lab Setup and Environment Initialization
 
-### 1. Generate Read-Only Credential
-Command executed:
+### Start the Lab Environment Containers
 ```bash
-vault read database/creds/lis-readonly
+# Start MariaDB
+docker run -d \
+  --name meddefense-lis-vault \
+  -p 3306:3306 \
+  -e MYSQL_ROOT_PASSWORD=vault_lab_root_9k2m \
+  -e MYSQL_DATABASE=lis_production \
+  mariadb:10.11
+
+# Start Vault in development mode
+docker run -d \
+  --name meddefense-vault \
+  -p 8200:8200 \
+  -e VAULT_DEV_ROOT_TOKEN_ID=meddefense-vault-dev \
+  hashicorp/vault:latest
+Configure Vault Environment VariablesBashexport VAULT_ADDR='[http://127.0.0.1:8200](http://127.0.0.1:8200)'
+export VAULT_TOKEN='meddefense-vault-dev'
+Demonstration Sequence Outputs1. Generate Read-Only CredentialCommand executed:Bashvault read database/creds/lis-readonly
 Actual Output:PlaintextKey                Value
 ---                -----
 lease_id           database/creds/lis-readonly/v-lis-read-xyz789012345
@@ -47,4 +62,4 @@ Actual Output:Plaintext+--------------------+------+
 +--------------------+------+
 | v-lis-read-xyz7890 | %    |
 +--------------------+------+
-Architectural Comparison: Static vs. Dynamic Identity ModelsDimensionStatic Model (svc_epic_int)Dynamic Model (HashiCorp Vault)Credential LifetimeInfinite / Standing (3+ years unrotated)Short-lived (15 minutes to 1 hour based on TTL)Rotation MethodManual, ad-hoc, rarely or never executedAutomated, programmatically forced rotationBlast Radius if StolenEnterprise-wide, permanent lateral movementLimited strictly to the remaining duration of the TTLAudit TrailNone (Shared static string password in cleartext files)Centralized at Vault via explicit Lease ID trackingOff-boarding ProcedureManual discovery and checklist dependenciesAutomatic revocation at TTL expiry with no human frictionStrategic RecommendationBased on the strategic threat exposure identified across the MedDefense network, the highest priority migration to Vault-managed dynamic credentials must be applied immediately to the automated backup orchestration systems (specifically the legacy architectures represented by svc_epic_int and the MedDefenseEHRBackupRole). High-privilege service accounts tasked with nightly maintenance or database synchronization currently utilize standing static keys that present an attractive target for memory extraction techniques. By shifting these long-lived parameters into Vault's dynamic connection model, we implement a modern Just-In-Time (JIT) workflow. This structural mitigation ensures that if an endpoint or script configuration is dumped during an intrusion, the exfiltrated parameters will expire automatically within minutes, neutralizing the risk of enterprise ransomware encryption chains and containing the malicious blast radius.
+Architectural Comparison: Static vs. Dynamic Identity ModelsDimensionStatic Model (svc_epic_int)Dynamic Model (HashiCorp Vault)Credential LifetimeInfinite / Standing (3+ years unrotated)Short-lived (15 minutes to 1 hour based on TTL)Rotation MethodManual, ad-hoc, rarely or never executedAutomated, programmatically forced rotationBlast Radius if StolenEnterprise-wide, permanent lateral movementLimited strictly to the remaining duration of the TTLAudit TrailNone (Shared static string password in cleartext files)Centralized at Vault via explicit Lease ID trackingOff-boarding ProcedureManual discovery and checklist dependenciesAutomatic revocation at TTL expiry with no human frictionStrategic RecommendationBased on the baseline risk exposure, the highest priority migration to Vault-managed dynamic credentials must be applied to the backup orchestration layer (MedDefenseEHRBackupRole). Automated server scripts and nightly maintenance tasks run on predictable schedules but require high levels of administrative access to execute. By transitioning these legacy accounts to Vault's Just-In-Time (JIT) identity structure, we successfully eliminate standing static keys from data disks and memory. This ensures that even if a host is compromised, the stolen token expires within minutes, preventing cyber-attackers from launching ransomware encryption loops or executing large-scale data exfiltration attacks.
