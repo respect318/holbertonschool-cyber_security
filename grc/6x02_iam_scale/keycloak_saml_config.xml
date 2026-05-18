@@ -4,26 +4,26 @@
                 Destination="http://localhost:5000/saml/acs">
 
   <saml:Issuer>http://localhost:8080/realms/meddefense</saml:Issuer>
-
+  
   <saml:Conditions NotBefore="2026-04-28T09:14:55Z"
                    NotOnOrAfter="2026-04-28T09:16:00Z">
     <saml:AudienceRestriction>
       <saml:Audience>meddefense-portal</saml:Audience>
     </saml:AudienceRestriction>
   </saml:Conditions>
-
+  
   <saml:AuthnStatement AuthnInstant="2026-04-28T09:15:00Z" SessionIndex="_def456">
     <saml:AuthnContext>
       <saml:AuthnContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:Password</saml:AuthnContextClassRef>
     </saml:AuthnContext>
   </saml:AuthnStatement>
-
+  
   <saml:AttributeStatement>
     <saml:Attribute Name="MedDefenseRole">
       <saml:AttributeValue>clinical_staff</saml:AttributeValue>
     </saml:Attribute>
   </saml:AttributeStatement>
-
+  
   <ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
   </ds:Signature>
 
