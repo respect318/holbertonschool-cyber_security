@@ -1,0 +1,19 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "BreakGlassAdminWithMFAAndIP",
+      "Effect": "Allow",
+      "Action": "*",
+      "Resource": "*",
+      "Condition": {
+        "BoolIfExists": {
+          "aws:MultiFactorAuthPresent": "true"
+        },
+        "IpAddress": {
+          "aws:SourceIp": "198.51.100.0/24"
+        }
+      }
+    }
+  ]
+}
